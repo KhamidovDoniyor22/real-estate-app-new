@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %} | User Dashboard {% endblock %}
+
+{% block content %}
+<section id="showcase-inner" class="py-5 text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-12">
+                <h1 class="display-4">User Dashboard</h1>
+                <p class="lead">Manage your Real Estate account</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Breadcrumb -->
+<section id="bc" class="mt-3">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'index' %}">
+                        <i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="breadcrumb-item active"> Dashboard</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Alerts -->
+{% include 'partials/_alerts.html' %}
+
+<section id="dashboard" class="py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Welcome {{ user.first_name }}</h2>
+
+                {% if user.is_agent or user.is_superuser %}
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>{% if user.is_superuser %}All Listings{% else %}My Listings{% endif %}</h3>
+                    <a href="{% url 'create_listing' %}" class="btn btn-primary">Create Listing</a>
+                </div>
+                {% if listings %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for listing in listings %}
+                        <tr>
+                            <td>{{ listing.id }}</td>
+                            <td>{{ listing.title }}</td>
+                            <td>{{ listing.list_date }}</td>
+                            <td>
+                                <a class="btn btn-light btn-sm" href="{% url 'listing' listing.id %}">View</a>
+                                <a class="btn btn-info btn-sm" href="{% url 'update_listing' listing.id %}">Edit</a>
+                                <a class="btn btn-danger btn-sm" href="{% url 'delete_listing' listing.id %}">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>You have no listings.</p>
+                {% endif %}
+                <hr>
+                {% endif %}
+
+                <h3>My Inquiries</h3>
+                {% if inquiries %}
+                <p>Here are the property inquiries you have made</p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Property</th>
+                            <th scope="col">Date</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for inquiry in inquiries %}
+                        <tr>
+                            <td>{{ inquiry.id }}</td>
+                            <td>{{ inquiry.property.title }}</td>
+                            <td>{{ inquiry.contact_date }}</td>
+                            <td>
+                                <a class="btn btn-light" href="{% url 'listing' inquiry.property.id %}">View Listing</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>You have not made any inquiries</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
