@@ -147,4 +147,8 @@ AUTH_USER_MODEL = 'users.User'
 
 # Security settings
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://*.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.herokuapp.com',
+    'https://*.up.railway.app',
+    'https://web-production-234e.up.railway.app',
+]
